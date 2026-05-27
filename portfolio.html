@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — [Dein Name]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0f0e0c;
+      --bg2:      #171614;
+      --bg3:      #1e1c19;
+      --border:   rgba(200,180,140,0.12);
+      --gold:     #c8a96e;
+      --gold2:    #e2c98a;
+      --cream:    #f0e8d8;
+      --muted:    #7a7060;
+      --text:     #d8cfc0;
+      --serif:    'Cormorant Garamond', Georgia, serif;
+      --sans:     'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ── SELECTION ── */
+    ::selection { background: var(--gold); color: var(--bg); }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(15,14,12,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    nav.scrolled { border-color: var(--border); background: rgba(15,14,12,0.97); }
+
+    .nav-name {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      letter-spacing: 0.08em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); font-size: 0.78rem; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 4rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(200,169,110,0.08) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 20% 80%, rgba(200,169,110,0.04) 0%, transparent 60%);
+    }
+    .hero-line {
+      position: absolute; top: 0; left: 50%; width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--border) 40%, transparent);
+    }
+    .hero-tag {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+      animation: fadeUp 1s ease both;
+    }
+    .hero-title {
+      font-family: var(--serif); font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 300; line-height: 0.9; color: var(--cream);
+      margin-bottom: 2rem;
+      animation: fadeUp 1s ease 0.15s both;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-subtitle {
+      max-width: 420px; font-size: 0.95rem; color: var(--muted);
+      line-height: 1.8;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      animation: fadeUp 1s ease 0.45s both;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 2rem; border: 1px solid var(--gold);
+      color: var(--gold); font-size: 0.78rem; letter-spacing: 0.14em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.25s, color 0.25s;
+    }
+    .btn:hover { background: var(--gold); color: var(--bg); }
+    .btn-ghost {
+      border-color: var(--border); color: var(--muted);
+      margin-left: 1rem;
+    }
+    .btn-ghost:hover { background: var(--border); color: var(--cream); }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; right: 4rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+      animation: fadeUp 1s ease 0.6s both;
+    }
+    .scroll-hint::after {
+      content: ''; width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 8rem 4rem; }
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300; color: var(--cream); line-height: 1.1;
+      margin-bottom: 3rem;
+    }
+    .section-title em { font-style: italic; }
+    .divider {
+      width: 60px; height: 1px; background: var(--gold);
+      margin-bottom: 3rem;
+    }
+
+    /* ── ÜBER MICH ── */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: start;
+    }
+    .about-text p { color: var(--muted); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .about-text p strong { color: var(--cream); font-weight: 400; }
+
+    .skills-list {
+      display: flex; flex-direction: column; gap: 1.2rem;
+      list-style: none;
+    }
+    .skills-list li {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 1.2rem; border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .skills-list li span { color: var(--gold); font-size: 0.7rem; }
+    .skill-dots { display: flex; gap: 5px; }
+    .skill-dots i {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border); display: block;
+      transition: background 0.3s;
+    }
+    .skill-dots i.filled { background: var(--gold); }
+
+    /* ── LEBENSLAUF ── */
+    #cv { border-top: 1px solid var(--border); }
+    .cv-grid {
+      display: grid; grid-template-columns: 1fr 2fr; gap: 5rem;
+    }
+    .cv-nav {
+      display: flex; flex-direction: column; gap: 0.5rem;
+      position: sticky; top: 8rem; height: fit-content;
+    }
+    .cv-nav-item {
+      padding: 0.6rem 1rem; border-left: 2px solid var(--border);
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); cursor: pointer; transition: all 0.25s;
+    }
+    .cv-nav-item.active, .cv-nav-item:hover {
+      border-color: var(--gold); color: var(--gold); padding-left: 1.5rem;
+    }
+
+    .cv-section { display: none; }
+    .cv-section.active { display: block; }
+
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      display: grid; grid-template-columns: 130px 1fr;
+      gap: 2rem; padding: 2rem 0; border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateY(15px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .timeline-item.visible { opacity: 1; transform: none; }
+    .timeline-year {
+      font-family: var(--serif); font-size: 0.85rem; color: var(--gold);
+      padding-top: 0.15rem; letter-spacing: 0.05em;
+    }
+    .timeline-content h3 {
+      font-family: var(--serif); font-size: 1.2rem; font-weight: 400;
+      color: var(--cream); margin-bottom: 0.3rem;
+    }
+    .timeline-content .company { color: var(--gold2); font-size: 0.8rem; margin-bottom: 0.6rem; }
+    .timeline-content p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
+
+    .cv-download {
+      margin-top: 3rem; padding: 2rem; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg3);
+    }
+    .cv-download p { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+    .cv-download h4 { color: var(--cream); font-weight: 400; font-size: 1rem; }
+
+    /* ── ARBEITSPROBEN ── */
+    #works { background: var(--bg2); }
+    .filter-bar {
+      display: flex; gap: 1rem; margin-bottom: 3.5rem; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.2rem; border: 1px solid var(--border);
+      background: none; color: var(--muted); font-family: var(--sans);
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--gold); color: var(--gold);
+    }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2px;
+    }
+    .work-card {
+      position: relative; overflow: hidden; cursor: pointer;
+      background: var(--bg3);
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .work-card.visible { opacity: 1; transform: none; }
+    .work-card--wide { grid-column: span 2; }
+
+    .work-card-thumb {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover;
+      display: block; transition: transform 0.6s ease;
+      background: var(--bg3);
+    }
+    .work-card--video .work-card-thumb { aspect-ratio: 16/9; }
+    .work-card:hover .work-card-thumb { transform: scale(1.04); }
+
+    /* PDF/Bild Placeholder */
+    .work-thumb-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--bg3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1rem;
+      transition: background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .work-card--video .work-thumb-placeholder { aspect-ratio: 16/9; }
+    .work-card:hover .work-thumb-placeholder { background: #252320; }
+
+    .work-thumb-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(200,169,110,0.05) 0%, transparent 60%);
+    }
+    .work-thumb-icon {
+      width: 56px; height: 56px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.4rem;
+    }
+    .work-thumb-label {
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Hover overlay */
+    .work-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.3) 50%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2rem; opacity: 0; transition: opacity 0.35s;
+    }
+    .work-card:hover .work-card-overlay { opacity: 1; }
+
+    .work-card-tag {
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .work-card-title {
+      font-family: var(--serif); font-size: 1.4rem; color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .work-card-desc { font-size: 0.82rem; color: rgba(208,199,185,0.7); margin-bottom: 1.2rem; }
+    .work-card-action {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+    }
+    .work-card-action::after { content: '→'; }
+
+    /* Video play button */
+    .play-btn {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 64px; height: 64px; border: 1.5px solid rgba(200,169,110,0.6);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 1.2rem;
+      transition: all 0.3s;
+      background: rgba(15,14,12,0.5);
+      backdrop-filter: blur(4px);
+    }
+    .work-card:hover .play-btn {
+      border-color: var(--gold); background: rgba(15,14,12,0.8);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,9,8,0.96);
+      display: none; align-items: center; justify-content: center;
+      padding: 2rem; backdrop-filter: blur(8px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      width: 100%; max-width: 900px; max-height: 90vh;
+      background: var(--bg3); border: 1px solid var(--border);
+      display: flex; flex-direction: column; position: relative;
+    }
+    .modal-header {
+      padding: 1.5rem 2rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h3 { font-family: var(--serif); font-weight: 400; color: var(--cream); }
+    .modal-close {
+      background: none; border: none; color: var(--muted); font-size: 1.4rem;
+      cursor: pointer; transition: color 0.2s; padding: 0.2rem;
+    }
+    .modal-close:hover { color: var(--cream); }
+    .modal-body { flex: 1; overflow: auto; padding: 0; }
+    .modal-body iframe { width: 100%; height: 70vh; border: none; display: block; }
+    .modal-body video { width: 100%; display: block; background: #000; }
+
+    /* ── KONTAKT ── */
+    #contact { border-top: 1px solid var(--border); }
+    .contact-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start;
+    }
+    .contact-text p { color: var(--muted); font-size: 0.95rem; line-height: 1.9; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem;
+      color: var(--muted); text-decoration: none; font-size: 0.88rem;
+      transition: color 0.25s; padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-link:hover { color: var(--gold); }
+    .contact-link-icon {
+      width: 38px; height: 38px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0; transition: border-color 0.25s, color 0.25s;
+    }
+    .contact-link:hover .contact-link-icon { border-color: var(--gold); color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 4rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(25px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      section { padding: 5rem 2rem; }
+      #hero { padding: 0 2rem 4rem; }
+      .about-grid, .cv-grid, .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .cv-nav { position: static; flex-direction: row; flex-wrap: wrap; }
+      .work-card--wide { grid-column: span 1; }
+      .scroll-hint { display: none; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-title { font-size: clamp(3rem, 15vw, 5rem); }
+      .works-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav id="navbar">
+  <a href="#hero" class="nav-name">[Dein Name]</a>
+  <ul class="nav-links">
+    <li><a href="#about">Über mich</a></li>
+    <li><a href="#cv">Lebenslauf</a></li>
+    <li><a href="#works">Arbeitsproben</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <p class="hero-tag">Portfolio &mdash; 2025</p>
+  <h1 class="hero-title">Vorname<br><em>Nachname</em></h1>
+  <p class="hero-subtitle">
+    Kreative/r [Beruf / Titel] mit Leidenschaft für [Themenbereich]. Ich erzähle Geschichten durch Gestaltung, Sprache und Bild.
+  </p>
+  <div class="hero-cta">
+    <a href="#works" class="btn">Arbeiten ansehen</a>
+    <a href="#contact" class="btn btn-ghost">Kontakt aufnehmen</a>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ── ÜBER MICH ── -->
+<section id="about">
+  <div class="section-label">01 — Über mich</div>
+  <h2 class="section-title">Wer <em>ich bin</em></h2>
+  <div class="divider"></div>
+
+  <div class="about-grid">
+    <div class="about-text fade-up">
+      <p>
+        Hallo, ich bin <strong>[Dein Name]</strong>. Ich arbeite als [Berufsbezeichnung] mit Schwerpunkt auf [Fachgebiet]. Seit über [X] Jahren begleite ich Projekte von der ersten Idee bis zur fertigen Umsetzung.
+      </p>
+      <p>
+        Meine Arbeit verbindet <strong>konzeptionelles Denken</strong> mit handwerklicher Präzision. Ob redaktionelle Projekte, visuelle Kommunikation oder digitale Medien – ich bringe Inhalte zum Leben.
+      </p>
+      <p>
+        Wenn ich nicht arbeite, findet man mich bei [Hobby/Interesse] oder auf der Suche nach dem nächsten inspirierenden Projekt.
+      </p>
+    </div>
+
+    <div class="fade-up">
+      <ul class="skills-list">
+        <li>
+          [Skill 1]
+          <div class="skill-dots">
+            <i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i>
+          </div>
+        </li>
+        <li>
+          [Skill 2]
+          <div class="skill-dots">
+            <i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i>
+          </div>
+        </li>
+        <li>
+          [Skill 3]
+          <div class="skill-dots">
+            <i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i>
+          </div>
+        </li>
+        <li>
+          [Skill 4]
+          <div class="skill-dots">
+            <i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i>
+          </div>
+        </li>
+        <li>
+          [Skill 5]
+          <div class="skill-dots">
+            <i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── LEBENSLAUF ── -->
+<section id="cv">
+  <div class="section-label">02 — Werdegang</div>
+  <h2 class="section-title">Lebens<em>lauf</em></h2>
+  <div class="divider"></div>
+
+  <div class="cv-grid fade-up">
+    <div>
+      <div class="cv-nav">
+        <div class="cv-nav-item active" onclick="switchCV('erfahrung')">Erfahrung</div>
+        <div class="cv-nav-item" onclick="switchCV('ausbildung')">Ausbildung</div>
+      </div>
+
+      <div class="cv-download">
+        <div>
+          <h4>Vollständiger Lebenslauf</h4>
+          <p>Als PDF herunterladen</p>
+        </div>
+        <!-- 📌 ANPASSEN: href auf deinen CV-Dateinamen -->
+        <a href="cv.pdf" download class="btn">↓ Download</a>
+      </div>
+    </div>
+
+    <div>
+      <!-- Berufserfahrung -->
+      <div id="erfahrung" class="cv-section active">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2022 – Heute</div>
+            <div class="timeline-content">
+              <h3>[Berufsbezeichnung]</h3>
+              <div class="company">[Unternehmen / Freiberuflich]</div>
+              <p>Kurze Beschreibung deiner Aufgaben und Verantwortlichkeiten. Was hast du bewirkt, welche Projekte hast du geleitet?</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2019 – 2022</div>
+            <div class="timeline-content">
+              <h3>[Berufsbezeichnung]</h3>
+              <div class="company">[Unternehmen]</div>
+              <p>Kurze Beschreibung. Herausforderungen und erreichte Meilensteine während dieser Zeit.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2016 – 2019</div>
+            <div class="timeline-content">
+              <h3>[Berufsbezeichnung]</h3>
+              <div class="company">[Unternehmen]</div>
+              <p>Erste Berufserfahrungen und wichtige Projekte aus dieser Phase.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ausbildung -->
+      <div id="ausbildung" class="cv-section">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2014 – 2016</div>
+            <div class="timeline-content">
+              <h3>[Master / Abschluss]</h3>
+              <div class="company">[Universität / Hochschule]</div>
+              <p>Studienschwerpunkte, Abschlussarbeit, besondere Leistungen.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2011 – 2014</div>
+            <div class="timeline-content">
+              <h3>[Bachelor / Ausbildung]</h3>
+              <div class="company">[Universität / Schule]</div>
+              <p>Beschreibung des Studiengangs und der erlangten Kompetenzen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ARBEITSPROBEN ── -->
+<section id="works">
+  <div class="section-label">03 — Portfolio</div>
+  <h2 class="section-title">Arbeits<em>proben</em></h2>
+  <div class="divider"></div>
+
+  <div class="filter-bar fade-up">
+    <button class="filter-btn active" onclick="filterWorks('all')">Alle</button>
+    <button class="filter-btn" onclick="filterWorks('pdf')">PDFs</button>
+    <button class="filter-btn" onclick="filterWorks('ebook')">E-Book</button>
+    <button class="filter-btn" onclick="filterWorks('video')">Videos</button>
+  </div>
+
+  <div class="works-grid" id="worksGrid">
+
+    <!-- ── E-BOOK ── -->
+    <!-- 📌 ANPASSEN: data-file="pfad/zu/ebook.pdf" -->
+    <div class="work-card work-card--wide" data-cat="ebook"
+         onclick="openModal('E-Book Titel', 'ebook', 'ebook.pdf')">
+      <div class="work-thumb-placeholder" style="aspect-ratio:16/7">
+        <div class="work-thumb-icon">📖</div>
+        <div class="work-thumb-label">E-Book &nbsp;/&nbsp; PDF</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">E-Book</div>
+        <div class="work-card-title">[E-Book Titel]</div>
+        <div class="work-card-desc">Kurze Beschreibung des E-Books, worum es geht und für wen es gedacht ist.</div>
+        <span class="work-card-action">E-Book öffnen</span>
+      </div>
+    </div>
+
+    <!-- ── PDF 1 (Bildlastig) ── -->
+    <!-- 📌 ANPASSEN: Ersetze die thumb-placeholder durch ein <img src="vorschau.jpg"> wenn vorhanden -->
+    <div class="work-card" data-cat="pdf"
+         onclick="openModal('Projekt 1', 'pdf', 'projekt1.pdf')">
+      <div class="work-thumb-placeholder">
+        <div class="work-thumb-icon">🖼</div>
+        <div class="work-thumb-label">PDF</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">PDF &mdash; [Kategorie]</div>
+        <div class="work-card-title">[Projekt 1]</div>
+        <div class="work-card-desc">Bildunterschrift oder kurze Beschreibung.</div>
+        <span class="work-card-action">Ansehen</span>
+      </div>
+    </div>
+
+    <!-- ── VIDEO 1 ── -->
+    <!-- 📌 ANPASSEN: data-file="pfad/video.mp4" oder YouTube-URL -->
+    <div class="work-card work-card--video" data-cat="video"
+         onclick="openModal('Video Titel', 'video', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+      <div class="work-thumb-placeholder" style="aspect-ratio:16/9">
+        <div class="play-btn">▶</div>
+        <div class="work-thumb-icon" style="border:none; opacity:0.3">🎬</div>
+        <div class="work-thumb-label">Video</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">Video</div>
+        <div class="work-card-title">[Video Titel]</div>
+        <div class="work-card-desc">Beschreibung des Videos oder Projekts.</div>
+        <span class="work-card-action">Abspielen</span>
+      </div>
+    </div>
+
+    <!-- ── PDF 2 ── -->
+    <div class="work-card" data-cat="pdf"
+         onclick="openModal('Projekt 2', 'pdf', 'projekt2.pdf')">
+      <div class="work-thumb-placeholder">
+        <div class="work-thumb-icon">📄</div>
+        <div class="work-thumb-label">PDF</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">PDF &mdash; [Kategorie]</div>
+        <div class="work-card-title">[Projekt 2]</div>
+        <div class="work-card-desc">Kurze Beschreibung.</div>
+        <span class="work-card-action">Ansehen</span>
+      </div>
+    </div>
+
+    <!-- ── PDF 3 ── -->
+    <div class="work-card" data-cat="pdf"
+         onclick="openModal('Projekt 3', 'pdf', 'projekt3.pdf')">
+      <div class="work-thumb-placeholder">
+        <div class="work-thumb-icon">📄</div>
+        <div class="work-thumb-label">PDF</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">PDF &mdash; [Kategorie]</div>
+        <div class="work-card-title">[Projekt 3]</div>
+        <div class="work-card-desc">Kurze Beschreibung.</div>
+        <span class="work-card-action">Ansehen</span>
+      </div>
+    </div>
+
+    <!-- ── VIDEO 2 ── -->
+    <div class="work-card work-card--video" data-cat="video"
+         onclick="openModal('Video 2', 'video', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+      <div class="work-thumb-placeholder" style="aspect-ratio:16/9">
+        <div class="play-btn">▶</div>
+        <div class="work-thumb-icon" style="border:none; opacity:0.3">🎬</div>
+        <div class="work-thumb-label">Video</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">Video</div>
+        <div class="work-card-title">[Video 2]</div>
+        <div class="work-card-desc">Beschreibung.</div>
+        <span class="work-card-action">Abspielen</span>
+      </div>
+    </div>
+
+    <!-- ── PDF 4 ── -->
+    <div class="work-card" data-cat="pdf"
+         onclick="openModal('Projekt 4', 'pdf', 'projekt4.pdf')">
+      <div class="work-thumb-placeholder">
+        <div class="work-thumb-icon">🖼</div>
+        <div class="work-thumb-label">PDF</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">PDF &mdash; [Kategorie]</div>
+        <div class="work-card-title">[Projekt 4]</div>
+        <div class="work-card-desc">Kurze Beschreibung.</div>
+        <span class="work-card-action">Ansehen</span>
+      </div>
+    </div>
+
+    <!-- ── PDF 5 ── -->
+    <div class="work-card" data-cat="pdf"
+         onclick="openModal('Projekt 5', 'pdf', 'projekt5.pdf')">
+      <div class="work-thumb-placeholder">
+        <div class="work-thumb-icon">📄</div>
+        <div class="work-thumb-label">PDF</div>
+      </div>
+      <div class="work-card-overlay">
+        <div class="work-card-tag">PDF &mdash; [Kategorie]</div>
+        <div class="work-card-title">[Projekt 5]</div>
+        <div class="work-card-desc">Kurze Beschreibung.</div>
+        <span class="work-card-action">Ansehen</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── KONTAKT ── -->
+<section id="contact">
+  <div class="section-label">04 — Kontakt</div>
+  <h2 class="section-title">Lass uns <em>sprechen</em></h2>
+  <div class="divider"></div>
+
+  <div class="contact-inner fade-up">
+    <div class="contact-text">
+      <p>
+        Du hast ein spannendes Projekt oder eine Anfrage? Ich freue mich über jede Nachricht – egal ob Auftrag, Kollaboration oder einfach ein Austausch.
+      </p>
+      <p>
+        Antworte in der Regel innerhalb von 24–48 Stunden.
+      </p>
+      <a href="mailto:deine@email.de" class="btn">E-Mail schreiben</a>
+    </div>
+
+    <div class="contact-links">
+      <!-- 📌 ANPASSEN: Links ersetzen -->
+      <a href="mailto:deine@email.de" class="contact-link">
+        <span class="contact-link-icon">✉</span>
+        deine@email.de
+      </a>
+      <a href="https://linkedin.com/in/deinprofil" target="_blank" class="contact-link">
+        <span class="contact-link-icon">in</span>
+        LinkedIn-Profil
+      </a>
+      <a href="https://instagram.com/deinprofil" target="_blank" class="contact-link">
+        <span class="contact-link-icon">ig</span>
+        Instagram
+      </a>
+      <a href="tel:+4900000000" class="contact-link">
+        <span class="contact-link-icon">☎</span>
+        +49 000 000 000
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>&copy; 2025 [Dein Name]. Alle Rechte vorbehalten.</p>
+  <p>Mit ♥ gestaltet.</p>
+</footer>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Titel</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  /* ── NAV SCROLL ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  /* ── SCROLL ANIMATIONS ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // stagger children (timeline items, work cards)
+        const children = e.target.querySelectorAll('.timeline-item, .work-card');
+        children.forEach((child, i) => {
+          setTimeout(() => child.classList.add('visible'), i * 100);
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up, .work-card, .timeline-item').forEach(el => {
+    observer.observe(el);
+  });
+
+  /* ── CV TAB SWITCH ── */
+  function switchCV(id) {
+    document.querySelectorAll('.cv-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.cv-nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    // Trigger animations
+    document.querySelectorAll('#' + id + ' .timeline-item').forEach((el, i) => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), i * 100 + 50);
+    });
+  }
+
+  /* ── FILTER ── */
+  function filterWorks(cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.work-card').forEach(card => {
+      const match = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = match ? '' : 'none';
+    });
+  }
+
+  /* ── MODAL ── */
+  function openModal(title, type, file) {
+    const overlay = document.getElementById('modalOverlay');
+    const body = document.getElementById('modalBody');
+    document.getElementById('modalTitle').textContent = title;
+
+    if (type === 'video') {
+      if (file.includes('youtube.com') || file.includes('youtu.be')) {
+        body.innerHTML = `<iframe src="${file}" allowfullscreen allow="autoplay"></iframe>`;
+      } else {
+        body.innerHTML = `<video controls src="${file}"></video>`;
+      }
+    } else {
+      // PDF / E-Book
+      body.innerHTML = `<iframe src="${file}#toolbar=1&navpanes=1&view=FitH" type="application/pdf"></iframe>`;
+    }
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    const overlay = document.getElementById('modalOverlay');
+    overlay.classList.remove('open');
+    document.getElementById('modalBody').innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+</body>
+</html>
